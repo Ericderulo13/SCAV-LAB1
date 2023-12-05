@@ -131,6 +131,6 @@ if __name__ == "__main__":
     l4 = lab4()
     result = subprocess.run(["ffmpeg"], stdout=subprocess.PIPE, text=True)
     result1 = subprocess.run([f'ffmpeg -i bbb.mp4 -ss 00:03:00 -t 00:00:05 -c:v copy -c:a copy bbb5.mp4'], shell=True,stdout=subprocess.PIPE, text=True)
-    #l4.vp8_vp9_h265_av1("bbb5.mp4") #funciona
+    l4.vp8_vp9_h265_av1("bbb5.mp4") #funciona
     l4.bit_docker("tt13","tt14")
-    #l4.gui_interface()  # Video comparison inside(funciona)
+    l4.gui_interface()  # Video comparison inside(funciona)
