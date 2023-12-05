@@ -6,6 +6,7 @@ import  matplotlib.pyplot as plt
 import numpy as np
 import PySimpleGUI as sg
 import P2.LAB2 as p2
+import P4.video_comparison as compare
 import P3.yuv_histogram_script as py
 import P3.subtiles_script as ps
 import time
@@ -26,13 +27,6 @@ class lab4():
         result3 =subprocess.run([f'ffmpeg -i new_bbb_resolution_{res1}.mp4 -c:v libx265 -crf 20 -preset medium -c:a aac -b:a 128k h265_{res1}p.mp4'], shell=True,stdout=subprocess.PIPE, text=True)
         #result4 =subprocess.run([f'ffmpeg -i new_bbb_resolution_720.mp4 -c:v libaom-av1 -crf 20 -b:v 0 -strict experimental -cpu-used 0 -c:a libopus -b:a 128k av1_480p.mkv'], shell=True,stdout=subprocess.PIPE, text=True)# funciona pero va massa lent
 
-
-    # Exercici 2
-    def video_comparison(self,video1,video2,output_path):
-        result = subprocess.run(["ffmpeg"], stdout=subprocess.PIPE, text=True)
-        result1 = subprocess.run([f'ffmpeg -i {video1} -i {video2} -filter_complex "[0:v]scale=iw/2:ih/2 [left]; [1:v]scale=iw/2:ih/2 [right]; [left][right]hstack" {output_path}/comparison_video.mp4'], shell=True,stdout=subprocess.PIPE, text=True)
-        return "comparison_video.mp4"
-
     def convert_file_to_base64(self,filename):
         try:
             contents = open(filename, 'rb').read()
@@ -47,7 +41,6 @@ class lab4():
 
         layout = [
             [sg.Text("First video"), sg.Input(key="-IN-"), sg.FileBrowse()],
-
             [sg.Text("Second video"), sg.Input(key="-IN2-"), sg.FileBrowse()],
             [sg.Text("Output Video"), sg.Input(key="-OUT-"), sg.FolderBrowse()],
             [sg.Text("Select video to modify resolution/add subtitle/showing YUV:"),sg.Radio("First video", "RADIO1", default=True, key="-VIDEO-"),sg.Radio("Second video", "RADIO1", key="-VIDEO2-")],
@@ -60,7 +53,7 @@ class lab4():
             if event in (sg.WINDOW_CLOSED, "Exit"):
                 break
             if event == "Video Comparison":
-                lab4().video_comparison(values["-IN-"],values["-IN2-"],values["-OUT-"])
+                compare.comp().video_comparison(values["-IN-"],values["-IN2-"],values["-OUT-"])
                 print("Video comparison done. See it in your output folder")
             if event == "YUV":
                 if values["-VIDEO-"]:
@@ -126,5 +119,5 @@ if __name__ == "__main__":
     result = subprocess.run(["ffmpeg"], stdout=subprocess.PIPE, text=True)
     result1 = subprocess.run([f'ffmpeg -i bbb.mp4 -ss 00:03:00 -t 00:00:05 -c:v copy -c:a copy bbb5.mp4'], shell=True,stdout=subprocess.PIPE, text=True)
     l4.vp8_vp9_h265_av1("bbb5.mp4") #funciona
-    l4.bit_docker("imagte","contenidor","/home/eric/PycharmProjects/SCAVPROJECT/P4")
+    l4.bit_docker("imagte1","contenidor1","/home/eric/PycharmProjects/SCAVPROJECT/P4")
     l4.gui_interface()  # Video comparison inside(funciona)
