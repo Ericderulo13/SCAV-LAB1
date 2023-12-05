@@ -99,19 +99,21 @@ class lab4():
 
     # Exercici 4
     #play a bit
-    def bit_docker(self,name,container,docker_file_directorio):
+    def bit_docker(self,name,container):
         import subprocess
-        # Command to build the Docker imae
-        build_command = f"sudo -S docker build -t {name}:latest ~/PycharmProjects/SCAVPROJECT/P4"
-        result = subprocess.run(build_command, shell=True, stdout=subprocess.PIPE, text=True, cwd=docker_file_directorio)
-
+        import subprocess
+        # Command to build the Docker image
+        build_command = f"sudo -S docker build -t {name}:latest /home/eric/PycharmProjects/SCAVPROJECT/P4"
+        result = subprocess.run(build_command, shell=True, stdout=subprocess.PIPE, text=True)
+        print("Build output:", result.stdout)
         # Command to run the Docker container
         run_command = f"sudo -S docker run -d --name {container} {name}"
-        process = subprocess.run(run_command, shell=True, stdout=subprocess.PIPE, text=True, cwd=docker_file_directorio)
-
+        process = subprocess.run(run_command, shell=True, stdout=subprocess.PIPE, text=True)
+        print("Build output:", process.stdout)
         # Command to copy files from the Docker container to a local directory
         copy_command = f"sudo -S docker cp {container}:/app /home/eric/PycharmProjects/SCAVPROJECT/P4"
-        result2 = subprocess.run(copy_command, shell=True, stdout=subprocess.PIPE, text=True, cwd=docker_file_directorio)
+        result2 = subprocess.run(copy_command, shell=True, stdout=subprocess.PIPE, text=True)
+        print("Build output:", result2.stdout)
 
     # Exercici
 if __name__ == "__main__":
@@ -119,5 +121,5 @@ if __name__ == "__main__":
     result = subprocess.run(["ffmpeg"], stdout=subprocess.PIPE, text=True)
     result1 = subprocess.run([f'ffmpeg -i bbb.mp4 -ss 00:03:00 -t 00:00:05 -c:v copy -c:a copy bbb5.mp4'], shell=True,stdout=subprocess.PIPE, text=True)
     l4.vp8_vp9_h265_av1("bbb5.mp4") #funciona
-    l4.bit_docker("imagte1","contenidor1","/home/eric/PycharmProjects/SCAVPROJECT/P4")
+    l4.bit_docker("47","mecuaento38")
     l4.gui_interface()  # Video comparison inside(funciona)
