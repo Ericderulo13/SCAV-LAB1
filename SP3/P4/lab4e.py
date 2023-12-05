@@ -1,6 +1,9 @@
+import os
+
 from PIL import Image
 import numpy as np
 import subprocess
+import docker
 import getpass
 import  matplotlib.pyplot as plt
 import numpy as np
@@ -100,26 +103,34 @@ class lab4():
     # Exercici 4
     #play a bit
     def bit_docker(self,name,container):
-        import subprocess
-        import subprocess
         # Command to build the Docker image
-        build_command = f"sudo -S docker build -t {name}:latest /home/eric/PycharmProjects/SCAVPROJECT/P4"
-        result = subprocess.run(build_command, shell=True, stdout=subprocess.PIPE, text=True)
-        print("Build output:", result.stdout)
-        # Command to run the Docker container
-        run_command = f"sudo -S docker run -d --name {container} {name}"
-        process = subprocess.run(run_command, shell=True, stdout=subprocess.PIPE, text=True)
-        print("Build output:", process.stdout)
-        # Command to copy files from the Docker container to a local directory
+        import subprocess
+        import time
+
+        # Comandos de Docker que se desean ejecutar
+        docker_commands = [
+            f"sudo -S docker build -t {name}:latest /home/eric/PycharmProjects/SCAVPROJECT/P4",
+            f"sudo -S docker run -d --name {container} {name}"
+        ]
+
+        # Combinar los comandos de Docker en uno solo para la creación del contenedor
+        combined_command = " && ".join(docker_commands)
+
+        # Ejecutar los comandos para crear el contenedor
+        subprocess.run(combined_command, shell=True)
+
+        # Esperar unos segundos para asegurarse de que el contenedor esté en ejecución
+        time.sleep(6)
+        # Comando para copiar archivos del contenedor al directorio local
         copy_command = f"sudo -S docker cp {container}:/app /home/eric/PycharmProjects/SCAVPROJECT/P4"
-        result2 = subprocess.run(copy_command, shell=True, stdout=subprocess.PIPE, text=True)
-        print("Build output:", result2.stdout)
+        # Ejecutar el comando para copiar archivos
+        subprocess.run(copy_command, shell=True)
 
     # Exercici
 if __name__ == "__main__":
     l4 = lab4()
     result = subprocess.run(["ffmpeg"], stdout=subprocess.PIPE, text=True)
     result1 = subprocess.run([f'ffmpeg -i bbb.mp4 -ss 00:03:00 -t 00:00:05 -c:v copy -c:a copy bbb5.mp4'], shell=True,stdout=subprocess.PIPE, text=True)
-    l4.vp8_vp9_h265_av1("bbb5.mp4") #funciona
-    l4.bit_docker("47","mecuaento38")
-    l4.gui_interface()  # Video comparison inside(funciona)
+    #l4.vp8_vp9_h265_av1("bbb5.mp4") #funciona
+    l4.bit_docker("tt13","tt14")
+    #l4.gui_interface()  # Video comparison inside(funciona)
